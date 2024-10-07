@@ -55,7 +55,7 @@ def get_commit_message(diff):
 
     # Using the ChatCompletion interface to interact with gpt-3.5-turbo
     response = client.chat.completions.create(
-        model=deployment,
+        model= deployment,
         messages=[
             {
                 "role": "system",
