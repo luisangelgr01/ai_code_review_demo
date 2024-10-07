@@ -34,6 +34,9 @@ jobs:
       run: python .github/actions/generate_commit_message.py  # Run the commit message script.
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # Provide the OpenAI API key from GitHub secrets.
+        AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+        AZURE_OPENAI_GPT_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_GPT_DEPLOYMENT }}
+        AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
 
     # Configure Git to push using the provided token.
     - name: Set up Git for push

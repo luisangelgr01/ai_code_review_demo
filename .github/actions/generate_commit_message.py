@@ -1,6 +1,18 @@
 import os
-import openai
+from openai import AzureOpenAI
 import subprocess
+
+# Load OpenAI API key from environment
+endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+deployment = os.getenv("AZURE_OPENAI_GPT_DEPLOYMENT")
+subscription_key = os.getenv("AZURE_OPENAI_API_KEY")
+
+# Initialize Azure OpenAI client with key-based authentication
+client = AzureOpenAI(
+    azure_endpoint = endpoint,
+    api_key = subscription_key,
+    api_version = "2024-05-01-preview",
+)
 
 def get_code_diff():
     """
@@ -31,19 +43,19 @@ def get_commit_message(diff):
         return diff
 
     # Constructing a prompt to guide the model
-    context = ("You are an AI code reviewer. Generate a commit message with a title and a body. "
-               "The title should start with an appropriate emoticon: \n\n"
-               "✨ for new features\n"
-               "🐛 for bug fixes\n"
-               "📚 for documentation updates\n"
-               "🚀 for performance improvements\n"
-               "🧹 for cleaning up code\n"
-               "⚙️ for configuration changes\n\n"
-               "Start with 'Title:' for the title and 'Body:' for the detailed description. Here are the code changes:")
+    context=("You are an AI code reviewer. Generate a commit message with a title and a body. "
+            "The title should start with an appropriate emoticon: \n\n"
+            "✨ for new features\n"
+            "🐛 for bug fixes\n"
+            "📚 for documentation updates\n"
+            "🚀 for performance improvements\n"
+            "🧹 for cleaning up code\n"
+            "⚙️ for configuration changes\n\n"
+            "Start with 'Title:' for the title and 'Body:' for the detailed description. Here are the code changes:")
 
     # Using the ChatCompletion interface to interact with gpt-3.5-turbo
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+    response = client.chat.completions.create(
+        model=deployment,
         messages=[
             {
                 "role": "system",

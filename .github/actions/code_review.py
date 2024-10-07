@@ -1,14 +1,24 @@
 import os
-import openai
+from openai import AzureOpenAI
 from github import Github
 import git
 import json
 import textwrap
 
 # Load OpenAI API key from environment
-openai.api_key = os.getenv('OPENAI_API_KEY')
+    # openai.api_key = os.getenv('OPENAI_API_KEY')
+endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+deployment = os.getenv("AZURE_OPENAI_GPT_DEPLOYMENT")
+subscription_key = os.getenv("AZURE_OPENAI_API_KEY")
 
-# Set the maximum token limit for GPT-4
+# Initialize Azure OpenAI client with key-based authentication
+client = AzureOpenAI(
+    azure_endpoint = endpoint,
+    api_key = subscription_key,
+    api_version = "2024-05-01-preview",
+)
+
+# Set the maximum token limit for GPT-3.5 Turbo
 TOKEN_LIMIT = 4000
 
 def get_file_content(file_path):
@@ -72,8 +82,8 @@ def send_to_openai(files):
     reviews = []
     for chunk in chunks:
         # Send a message to OpenAI with each chunk of the code for review
-        message = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+        message = client.chat.completions.create(
+            model=deployment,
             messages=[
                 {
                     "role": "user",
