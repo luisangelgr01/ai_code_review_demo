@@ -41,7 +41,7 @@ jobs:
     # Configure Git to push using the provided token.
     - name: Set up Git for push
       run: |
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/mchl-schrdng/code_review.git
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/luisangelgr01/ai_code_review_demo.git
 
     # Push the amended commit to the main branch.
     - name: Push changes
