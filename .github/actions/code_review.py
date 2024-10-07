@@ -93,7 +93,7 @@ def send_to_openai(files):
         )
 
         # Add the assistant's reply to the list of reviews
-        reviews.append(message['choices'][0]['message']['content'])
+        reviews.append(message.choices[0].message.content)
 
     # Join all the reviews into a single string
     review = "\n".join(reviews)
