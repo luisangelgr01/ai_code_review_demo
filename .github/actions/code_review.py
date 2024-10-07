@@ -83,7 +83,7 @@ def send_to_openai(files):
     for chunk in chunks:
         # Send a message to OpenAI with each chunk of the code for review
         message = client.chat.completions.create(
-            model= deployment,
+            model = deployment,
             messages=[
                 {
                     "role": "user",
