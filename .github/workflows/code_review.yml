@@ -26,6 +26,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      # Configure Git to push using the provided token.
+      - name: Set up Git
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/luisangelgr01/ai_code_review_demo.git
+
       - name: Run review
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -33,8 +38,3 @@ jobs:
           AZURE_OPENAI_GPT_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_GPT_DEPLOYMENT }}
           AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
         run: python .github/actions/code_review.py
-      
-      # Configure Git to push using the provided token.
-      - name: Set up Git
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/luisangelgr01/ai_code_review_demo.git
