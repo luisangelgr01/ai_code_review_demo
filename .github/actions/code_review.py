@@ -83,7 +83,7 @@ def send_to_openai(files):
     for chunk in chunks:
         # Send a message to OpenAI with each chunk of the code for review
         message = client.chat.completions.create(
-            model= deployment,
+            model = deployment,
             messages=[
                 {
                     "role": "user",
@@ -93,7 +93,7 @@ def send_to_openai(files):
         )
 
         # Add the assistant's reply to the list of reviews
-        reviews.append(message['choices'][0]['message']['content'])
+        reviews.append(message.choices[0].message.content)
 
     # Join all the reviews into a single string
     review = "\n".join(reviews)
@@ -118,13 +118,24 @@ def main():
     2. Sending those files to OpenAI for review
     3. Posting the review as a comment on the PR
     """
+
+    # Load required environment variables
+    github_token = os.getenv('GITHUB_TOKEN')
+    if not github_token:
+        raise ValueError("GITHUB_TOKEN environment variable is missing.")
+
+    # Get the pull request event JSON
+    event_path = os.getenv('GITHUB_EVENT_PATH')
+    if not event_path:
+        raise ValueError("GITHUB_EVENT_PATH environment variable is missing.")
+    
     # Get the pull request event JSON
     with open(os.getenv('GITHUB_EVENT_PATH')) as json_file:
         event = json.load(json_file)
     
     # Instantiate the Github object using the Github token
     # and get the pull request object
-    pr = Github(os.getenv('GITHUB_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
+    pr = Github(github_token).get_repo(event['repository']['full_name']).get_pull(event['number'])
 
     # Get the changed files in the pull request
     files = get_changed_files(pr)
